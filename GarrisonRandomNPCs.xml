@@ -1,0 +1,36 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+
+	<Script file="localizations.lua" />
+	<Script file="GarrisonRandomNPCs.lua" />
+
+	<GameTooltip name="GarrisonRandomNPCsScanTT" inherits="GameTooltipTemplate" alpha="0">
+		<Scripts>
+			<OnLoad/>
+			<OnHide/>
+			<OnTooltipAddMoney/>
+			<OnTooltipSetDefaultAnchor/>
+			<OnTooltipCleared/>
+		</Scripts>
+	</GameTooltip>
+
+	<Frame name="GarrisonRandomNPCsFrame" mixin="GarrisonRandomNPCsFrame_Mixin" parent="UIParent" frameStrata="BACKGROUND" hidden="true">
+		<Size x="120" y="24" />
+		<Anchors>
+			<Anchor point="BOTTOMRIGHT" relativeTo="MinimapCluster" relativePoint="BOTTOMLEFT" x="0" y="0" />
+		</Anchors>
+		<Frames>
+			<Button parentKey="ScanButton" name="GarrisonRandomNPCs_ScanButton" inherits="UIMenuButtonStretchTemplate,SecureActionButtonTemplate,SecureHandlerShowHideTemplate" setallpoints="true">
+				<Attributes>
+					<Attribute name="type" type="string" value="macro" />
+					<Attribute name="_onshow" type="string" value="self:Enable();" />
+					<Attribute name="_onhide" type="string" value="self:Disable();" />
+				</Attributes>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnEvent method="OnEvent" />
+			<OnLoad method="OnLoad" />
+		</Scripts>
+	</Frame>
+</Ui>
