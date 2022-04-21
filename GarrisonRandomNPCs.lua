@@ -114,7 +114,6 @@ local function pairsByKeys(t, f)
 end
 
 local function TraderOfTheDay(day)
-
 	local t=date("*t"); t.hour, t.min, t.sec = t.isdst and 9 or 8, 0, 0;
 	local timeCap = t.hour*60*60;
 
@@ -141,19 +140,19 @@ local function CheckGarrisonStatus()
 	end
 
 	-- check player level
-	if(UnitLevel("player")<90)then
+	if(UnitLevel("player")<GetMaxLevelForExpansionLevel(5))then
 		return PLAYERLEVEL_TOO_LOW;
 	end
 
 	-- check garrison level
-	local garrLevel = C_Garrison.GetGarrisonInfo(LE_GARRISON_TYPE_6_0) or 0;
+	local garrLevel = C_Garrison.GetGarrisonInfo(Enum.GarrisonType.Type_6_0) or 0;
 	if garrLevel<3 then
 		return GARRLEVEL_TOO_LOW;
 	end
 
 	-- check current zone
 	local wmZone = C_Map.GetBestMapForUnit("player");
-	if(not (wmZone==971 or wmZone==976))then
+	if not (wmZone==582 or wmZone==590) then
 		return OUT_OF_ZONE;
 	end
 
@@ -213,6 +212,7 @@ local function UpdateTooltip(tt,button)
 	local IsPet2HQuestFinished = C_QuestLog.IsQuestFlaggedCompleted(37645); -- per character (horde)
 	local IsPet3QuestFinished = C_QuestLog.IsQuestFlaggedCompleted(40329); -- accountwide
 	dailyReset = time() + GetQuestResetTime() - 86400;
+	local today = time();
 	classColors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
 
 	tt:ClearLines();
@@ -234,6 +234,19 @@ local function UpdateTooltip(tt,button)
 		tt:AddDoubleLine(C(npcs[id].name,"ffffffff"),C(npcs[id].line2,"ffaaaaaa"));
 		if region~=3 then
 			tt:AddLine(L.TraderRegionInfo,.7,.7,.7,1);
+		end
+		tt:AddLine(" ")
+		tt:AddLine(L.TheNextDays);
+		local n=1;
+		for i=num+1, #traderOrder2NpcID do
+			local id = traderOrder2NpcID[i][faction=="Alliance" and 1 or 2];
+			tt:AddDoubleLine(C(npcs[id].name,"ffffffff").." "..C("("..npcs[id].line2..")","ffaaaaaa"),L["WeekDay"..date("%w",today+(n*86400))]);
+			n=n+1;
+		end
+		for i=1, num-1 do
+			local id = traderOrder2NpcID[i][faction=="Alliance" and 1 or 2];
+			tt:AddDoubleLine(C(npcs[id].name,"ffffffff").." "..C("("..npcs[id].line2..")","ffaaaaaa"),L["WeekDay"..date("%w",today+(n*86400))]);
+			n=n+1;
 		end
 	end
 
@@ -312,6 +325,7 @@ local function UpdateTooltip(tt,button)
 	end
 	--]]
 
+	--[[
 	tt:AddLine(" ");
 	tt:AddLine(L.TodaySeen);
 
@@ -352,6 +366,11 @@ local function UpdateTooltip(tt,button)
 	if linecount==0 then
 		tt:AddLine(L.NoNPC,1,1,1);
 	end
+	--]]
+
+	tt:AddLine(" ")
+	--tt:AddLine(C(L.LeftClick,"fff0a55f") .. " | " .. C(L.ToggleScanBtn,"ff80ff80"));
+	tt:AddLine(C(L.RightClick,"fff0a55f") .. " | " .. C(L.ToggleOptions,"ff80ff80"));
 end
 
 local function ScanTooltip_GetLines(objType,id)
@@ -495,7 +514,7 @@ local options = {
 			args = {
 				AddOnLoaded = {
 					type = "toggle", width = "double",
-					name = L.OptAddOnLoaded, desc = L.OptAddOnLoadedDesc
+					name = L.AddOnLoaded, desc = L.AddOnLoadedDesc
 				},
 			}
 		},
@@ -517,12 +536,14 @@ local options = {
 				},
 				info = {
 					type = "header", order = 3,
-					name = L.OptHeadBrokerInfos
+					name = L.OptHeadBrokerInfos,
+					hidden = true
 				},
 				bbTraderOfTheDay = {
 					type = "toggle", order = 4,
 					name = L.OptTrader, desc = L.OptTraderBBDesc,
-					disabled = disabled
+					disabled = disabled,
+					hidden = true
 				},
 			}
 		},
@@ -541,11 +562,13 @@ local options = {
 						this = L.OptTraderRealmThis,
 						connected = L.OptTraderRealmConn,
 						all = L.OptTraderRealmAll
-					}
+					},
+					hidden = true
 				},
 				ttSeenToday = {
 					type = "toggle", order = 3,
-					name = L.OptSeenToday, desc = L.OptSeenTodayDesc
+					name = L.OptSeenToday, desc = L.OptSeenTodayDesc,
+					hidden = true
 				}
 			}
 		}
