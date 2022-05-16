@@ -1,4 +1,5 @@
-name: Github Actions - WoW AddOn Packaging
+name: build
+
 on:
   push:
     tags:
