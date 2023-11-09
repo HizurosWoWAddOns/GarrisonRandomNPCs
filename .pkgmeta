@@ -25,6 +25,18 @@ externals:
         url: https://repos.wowace.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
         tag: latest
 
+    libs/HizurosSharedTools:
+        url: https://github.com/HizurosWoWAddOns/HizurosSharedTools.git
+
+    libs/LibColors-1.0:
+        url: https://github.com/HizurosWoWAddOns/LibColors-1.0.git
+        tag: latest
+
+
+# missing externals on addon page
+required-dependencies:
+    - libstringcoloring-1-0
+
 enable-nolib-creation: no
 
 ignore:
@@ -33,5 +45,6 @@ ignore:
     - libs/CallbackHandler-1.0/CallbackHandler-1.0.xml
     - libs/LibDataBroker-1.0/README.textile
     - libs/LibDBIcon-1.0/lib.xml
+    - libs/HizurosSharedTools/README.md
 
 license-output: LICENSE
