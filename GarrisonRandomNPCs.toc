@@ -1,4 +1,4 @@
-## Interface: 100200
+## Interface: 100207
 ## Title: Garrison Random NPC's
 ## Notes: This addon provide a button to check your garrison on presence of random vendors and questgiver in level 3 garrisons. That doesn't include random questgiver from Inn/Tavern buildings.
 ## Author: Hizuro
